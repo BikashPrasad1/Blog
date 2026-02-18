@@ -1,17 +1,17 @@
 {% extends 'base.html' %}
 
-{% block title %}{{ category.category_name }} | Django Journal{% endblock %}
+{% block title %}Search | Django Journal{% endblock %}
 
 {% block content %}
 <section>
   <div class="section-head">
-    <h2>{{ category.category_name }}</h2>
-    <p class="section-subtitle">Curated posts in this category.</p>
+    <h2>Search Results</h2>
+    <p class="section-subtitle">{% if keyword %}Showing matches for "{{ keyword }}"{% else %}Type a keyword in the search bar to find posts.{% endif %}</p>
   </div>
 
   <div class="row g-4">
-    {% if posts %}
-      {% for post in posts %}
+    {% if blogs %}
+      {% for post in blogs %}
       <div class="col-12 col-md-6 col-xl-4">
         <article class="post-card h-100 reveal-up">
           <h3><a href="{% url 'blogs' post.slug %}">{{ post.title }}</a></h3>
@@ -23,8 +23,8 @@
     {% else %}
       <div class="col-12">
         <article class="empty-state">
-          <h3>No posts in this category yet</h3>
-          <p>Check back soon or explore other categories from the top navigation.</p>
+          <h3>No matching posts</h3>
+          <p>Try a broader keyword or browse categories from the header.</p>
         </article>
       </div>
     {% endif %}

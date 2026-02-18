@@ -1,61 +1,54 @@
-﻿{% extends 'base.html' %}
+{% extends 'base.html' %}
+
+{% block title %}{{ single_blog.title }} | Django Journal{% endblock %}
 
 {% block content %}
-<div class="mt-5">
-  <div class="row">
-    <div class="col-lg-8">
-      <article>
-        <header class="mb-4">
-          <h1 class="mb-1">{{ single_blog.title }}</h1>
-          <div class="text-muted mb-2">Posted {{ single_blog.created_at|date:"F j, Y" }} by {{ single_blog.author }}</div>
-          <a class="badge badge-primary text-decoration-none text-light" href="#">{{ single_blog.category }}</a>
+<article class="single-post-layout">
+  <div class="row g-4 g-xl-5 align-items-start">
+    <div class="col-12 col-xl-8">
+      <section class="single-post-card reveal-up">
+        <header class="single-header">
+          <p class="single-post-category">{{ single_blog.category }}</p>
+          <h1 class="single-post-title">{{ single_blog.title }}</h1>
+          <p class="post-meta">{{ single_blog.created_at|date:"F j, Y" }} | {{ single_blog.author }}</p>
         </header>
 
-        <figure class="mb-4">
-          <img class="img-fluid rounded" src="{{ single_blog.featured_image.url }}" alt="{{ single_blog.title }}" />
+        {% if single_blog.featured_image %}
+        <figure class="single-post-figure">
+          <img class="img-fluid" src="{{ single_blog.featured_image.url }}" alt="{{ single_blog.title }}">
         </figure>
+        {% endif %}
 
-        <section class="mb-5">
-          <p class="mb-4">{{ single_blog.short_description }}</p>
-          <p class="mb-4">{{ single_blog.blog_body }}</p>
+        <section class="single-post-content">
+          <p class="single-post-summary">{{ single_blog.short_description }}</p>
+          <div class="article-body">{{ single_blog.blog_body|linebreaks }}</div>
         </section>
-      </article>
+      </section>
     </div>
 
-    <div class="col-lg-4">
-      <div class="card mb-4">
-        <div class="card-header">Search</div>
-        <div class="card-body">
-          <div class="input-group">
-            <input class="form-control" type="text" placeholder="Enter search term..." aria-label="Enter search term..." aria-describedby="button-search" />
-            <button class="btn btn-primary" id="button-search" type="button">Go!</button>
-          </div>
-        </div>
-      </div>
+    <aside class="col-12 col-xl-4">
+      <div class="sidebar-stack sticky-top-panel">
+        <section class="sidebar-card reveal-up">
+          <h4>Browse Categories</h4>
+          <ul class="list-unstyled mb-0 sidebar-list">
+            {% for cat in categories %}
+            <li><a href="{% url 'posts_by_category' cat.id %}">{{ cat.category_name }}</a></li>
+            {% empty %}
+            <li class="text-muted">No categories available.</li>
+            {% endfor %}
+          </ul>
+        </section>
 
-      <div class="card mb-4 p-3">
-        <h4 class="font-italic">Categories</h4>
-        <div class="card-body">
-          <div class="row">
-            <div class="col-sm-12">
-              <ul class="list-unstyled mb-0">
-                {% for cat in categories %}
-                <li><a href="{% url 'posts_by_category' cat.id %}">{{ cat.category_name }}</a></li>
-                {% endfor %}
-              </ul>
-            </div>
-          </div>
-        </div>
+        <section class="sidebar-card reveal-up">
+          <h4>Quick Links</h4>
+          <ul class="list-unstyled mb-0 sidebar-list">
+            <li><a href="{% url 'home' %}">Back to Home</a></li>
+            <li><a href="#">Author Profile</a></li>
+          </ul>
+        </section>
       </div>
-
-      <div class="card mb-4 p-3">
-        <h4 class="font-italic">Follow Us</h4>
-        <ol class="list-unstyled">
-          <li><a href="#">GitHub</a></li>
-          <li><a href="#">LinkedIn</a></li>
-        </ol>
-      </div>
-    </div>
+    </aside>
   </div>
-</div>
+</article>
 {% endblock %}
+
